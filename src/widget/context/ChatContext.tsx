@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import { useSession } from '../hooks/useSession.js';
 import { useChat } from '../hooks/useChat.js';
+import { useServerConfig } from '../hooks/useServerConfig.js';
 import type {
   ChatContextValue,
   ChatView,
@@ -28,6 +29,19 @@ export function ChatProvider({
   onMessageReceive,
 }: ChatProviderProps) {
   const [currentView, setCurrentView] = useState<ChatView>('home');
+
+  // Discord 서버 정보 자동 로드
+  const { serverConfig } = useServerConfig({
+    apiEndpoint: config.apiEndpoint,
+    enabled: true,
+  });
+
+  // 서버 정보로 config 보완 (props가 우선, 없으면 서버 정보 사용)
+  const mergedConfig = useMemo<WidgetConfig>(() => ({
+    ...config,
+    title: config.title || serverConfig?.serverName || 'Dicotalk',
+    logo: config.logo || serverConfig?.serverIcon || undefined,
+  }), [config, serverConfig]);
 
   // 세션 관리
   const {
@@ -80,7 +94,7 @@ export function ChatProvider({
   }, [sessionId, createSession]);
 
   const value: ChatContextValue = {
-    config,
+    config: mergedConfig,
     sessionId,
     isSessionLoading,
     messages,

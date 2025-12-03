@@ -97,16 +97,18 @@ function App() {
         </div>
       </div>
 
-      {/* 위젯 (데모용 - API 없이 UI만 테스트) */}
+      {/* 위젯 (환경 변수로 설정 가능) */}
       <ChatWidget
         apiEndpoint="/api/chat"
-        title="데브다이브"
-        subtitle="24시간 운영해요"
-        welcomeMessage="안녕하세요! 무엇을 도와드릴까요? 😊"
-        agentName="젠"
-        themeColor="#4ADE80"
-        pollingInterval={3000}
-        placeholder="메시지를 입력하세요..."
+        title={process.env.NEXT_PUBLIC_WIDGET_TITLE || '고객 상담'}
+        subtitle={process.env.NEXT_PUBLIC_WIDGET_SUBTITLE || '24시간 운영해요'}
+        welcomeMessage={process.env.NEXT_PUBLIC_WIDGET_WELCOME_MESSAGE || '안녕하세요! 무엇을 도와드릴까요? 😊'}
+        agentName={process.env.NEXT_PUBLIC_WIDGET_AGENT_NAME || '상담사'}
+        agentAvatar={process.env.NEXT_PUBLIC_WIDGET_AGENT_AVATAR || undefined}
+        logo={process.env.NEXT_PUBLIC_WIDGET_LOGO || undefined}
+        themeColor={process.env.NEXT_PUBLIC_WIDGET_THEME_COLOR || '#4ADE80'}
+        pollingInterval={Number(process.env.NEXT_PUBLIC_WIDGET_POLLING_INTERVAL) || 3000}
+        placeholder={process.env.NEXT_PUBLIC_WIDGET_PLACEHOLDER || '메시지를 입력하세요...'}
       />
     </main>
   );

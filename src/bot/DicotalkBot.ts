@@ -4,6 +4,7 @@ import {
   Events,
   ThreadChannel,
   Message as DiscordMessage,
+  ChannelType,
 } from 'discord.js';
 import { ThreadManager } from './services/ThreadManager.js';
 import { MessageStore } from './services/MessageStore.js';
@@ -189,6 +190,33 @@ export class DicotalkBot {
    */
   get ready(): boolean {
     return this.isReady;
+  }
+
+  /**
+   * Discord 서버/채널 정보 가져오기
+   * 위젯에서 서버명, 채널명, 아이콘 등을 자동으로 표시할 때 사용
+   */
+  async getServerInfo(): Promise<{
+    serverName: string;
+    serverIcon: string | null;
+    channelName: string;
+  } | null> {
+    if (!this.isReady) return null;
+
+    try {
+      const channel = await this.client.channels.fetch(this.config.channelId);
+      if (!channel || channel.type !== ChannelType.GuildForum) return null;
+
+      const guild = channel.guild;
+
+      return {
+        serverName: guild.name,
+        serverIcon: guild.iconURL({ size: 128 }),
+        channelName: channel.name,
+      };
+    } catch {
+      return null;
+    }
   }
 
   /**

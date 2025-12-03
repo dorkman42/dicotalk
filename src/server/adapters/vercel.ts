@@ -1,6 +1,7 @@
 import type { DicotalkBot } from '../../bot/DicotalkBot.js';
 import { createMessagesHandler } from '../handlers/messagesHandler.js';
 import { createSessionHandler } from '../handlers/sessionHandler.js';
+import { createConfigHandler } from '../handlers/configHandler.js';
 import type { RequestContext, ResponseContext } from './base.js';
 
 export interface VercelAdapterOptions {
@@ -48,6 +49,7 @@ export function createNextAppRouterHandler(
 ) {
   const messagesHandler = createMessagesHandler(bot);
   const sessionHandler = createSessionHandler(bot);
+  const configHandler = createConfigHandler(bot);
   const cors = options?.cors ?? false;
 
   return async (request: Request): Promise<Response> => {
@@ -116,6 +118,9 @@ export function createNextAppRouterHandler(
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
+    } else if (path.endsWith('/config') && method === 'GET') {
+      // GET /config - Discord 서버 정보
+      await configHandler.getConfig(reqContext, resContext);
     } else {
       return new Response(JSON.stringify({ error: 'Not found' }), {
         status: 404,
