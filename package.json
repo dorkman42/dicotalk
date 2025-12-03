@@ -1,0 +1,84 @@
+{
+  "name": "dicotalk",
+  "version": "0.1.0",
+  "description": "Discord-based customer support chat widget for React",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./widget": {
+      "types": "./dist/widget/index.d.ts",
+      "default": "./dist/widget/index.js"
+    },
+    "./widget/styles.css": "./dist/widget/styles.css",
+    "./bot": {
+      "types": "./dist/bot/index.d.ts",
+      "default": "./dist/bot/index.js"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.ts",
+      "default": "./dist/server/index.js"
+    },
+    "./server/express": {
+      "types": "./dist/server/adapters/express.d.ts",
+      "default": "./dist/server/adapters/express.js"
+    },
+    "./server/vercel": {
+      "types": "./dist/server/adapters/vercel.d.ts",
+      "default": "./dist/server/adapters/vercel.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npm run clean && tsc && npm run copy-css",
+    "clean": "rm -rf dist",
+    "copy-css": "cp src/widget/styles.css dist/widget/styles.css",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "discord.js": "^14.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "typescript": "^5.3.0"
+  },
+  "keywords": [
+    "discord",
+    "chat",
+    "customer-support",
+    "widget",
+    "react",
+    "channel-talk"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/dicotalk"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
