@@ -12,6 +12,23 @@ export interface VercelAdapterOptions {
       };
 }
 
+// Vercel/Next.js Pages Router 호환 타입
+export interface VercelRequest {
+  method?: string;
+  url?: string;
+  query: Record<string, string | string[] | undefined>;
+  body: unknown;
+  headers: Record<string, string | string[] | undefined>;
+}
+
+export interface VercelResponse {
+  status: (code: number) => VercelResponse;
+  json: (data: unknown) => void;
+  send: (data: string) => void;
+  setHeader: (name: string, value: string) => VercelResponse;
+  end: () => void;
+}
+
 /**
  * Next.js App Router용 핸들러 생성
  *
@@ -124,22 +141,6 @@ export function createVercelHandler(
   const messagesHandler = createMessagesHandler(bot);
   const sessionHandler = createSessionHandler(bot);
   const cors = options?.cors ?? false;
-
-  interface VercelRequest {
-    method?: string;
-    url?: string;
-    query: Record<string, string | string[] | undefined>;
-    body: unknown;
-    headers: Record<string, string | string[] | undefined>;
-  }
-
-  interface VercelResponse {
-    status: (code: number) => VercelResponse;
-    json: (data: unknown) => void;
-    send: (data: string) => void;
-    setHeader: (name: string, value: string) => VercelResponse;
-    end: () => void;
-  }
 
   function handleCors(req: VercelRequest, res: VercelResponse): boolean {
     if (!cors) return false;
